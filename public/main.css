@@ -4,8 +4,14 @@ body, html {
     height: 100vh;
 }
 
+#preview {
+    height: 100%;
+    z-index: 0;
+}
+
 #docs {
     position: absolute;
     left: 1em;
     top: 1em;
+    z-index: 1;
 }
