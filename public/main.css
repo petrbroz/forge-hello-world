@@ -15,3 +15,10 @@ body, html {
     top: 1em;
     z-index: 1;
 }
+
+.myAwesomeButtonIcon {
+    background-image: url(https://img.icons8.com/color/48/000000/fire-element.png);
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
