@@ -28,6 +28,20 @@ class MyAwesomeExtension extends Autodesk.Viewing.Extension {
         this._button.addClass('myAwesomeButtonIcon');
         this._group.addControl(this._button);
     }
+
+    findLeafNodes() {
+        return new Promise((resolve, reject) => {
+            this.viewer.getObjectTree((tree) => {
+                let ids = [];
+                tree.enumNodeChildren(tree.getRootId(), (id) => {
+                    if (tree.getChildCount(id) === 0) {
+                        ids.push(id);
+                    }
+                }, true);
+                resolve(ids);
+            });
+        });
+    }
 }
 
 Autodesk.Viewing.theExtensionManager.registerExtension('MyAwesomeExtension', MyAwesomeExtension);
