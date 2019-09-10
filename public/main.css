@@ -1,0 +1,11 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+#docs {
+    position: absolute;
+    left: 1em;
+    top: 1em;
+}
