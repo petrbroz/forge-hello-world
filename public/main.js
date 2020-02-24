@@ -13,7 +13,10 @@ const options = {
 };
 
 Autodesk.Viewing.Initializer(options, function () {
-    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('preview'));
+    const config = {
+        extensions: ['PotreeExtension']
+    };
+    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('preview'), config);
     viewer.start();
 });
 
