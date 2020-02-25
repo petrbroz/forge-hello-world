@@ -18,6 +18,12 @@ Autodesk.Viewing.Initializer(options, function () {
     };
     viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('preview'), config);
     viewer.start();
+    // If an URN is provided in URL, load it immediately
+    const params = new URLSearchParams(window.location.search);
+    const urn = params.get('urn');
+    if (urn) {
+        loadDocument(urn);
+    }
 });
 
 function loadDocument(id) {
@@ -42,7 +48,13 @@ window.addEventListener('DOMContentLoaded', async function() {
             option.setAttribute('value', doc.id);
             select.appendChild(option);
         }
-        loadDocument(select.value);
+        const params = new URLSearchParams(window.location.search);
+        const urn = params.get('urn');
+        if (urn) {
+            select.value = urn;
+        } else {
+            loadDocument(select.value);
+        }
     } else {
         console.error(await resp.text());
     }
