@@ -4831,6 +4831,22 @@ void main()
 	#endif
 }`;
 
+	/**
+	 * @author mrdoob / http://mrdoob.com/
+	 */
+
+	function CanvasTexture( canvas, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy ) {
+
+		THREE.Texture.call( this, canvas, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy );
+
+		this.needsUpdate = true;
+
+	}
+
+	CanvasTexture.prototype = Object.create( THREE.Texture.prototype );
+	CanvasTexture.prototype.constructor = CanvasTexture;
+	CanvasTexture.prototype.isCanvasTexture = true;
+
 	class PointCloudMaterial extends THREE.RawShaderMaterial
 	{
 		constructor(parameters = {})
@@ -5933,7 +5949,7 @@ void main()
 			context.fillStyle = ctxGradient;
 			context.fill();
 
-			var texture = new THREE.CanvasTexture(canvas);
+			var texture = new CanvasTexture(canvas);
 			texture.needsUpdate = true;
 			texture.minFilter = THREE.LinearFilter;
 
@@ -9142,7 +9158,7 @@ void main()
 
 				gl.texImage2D(this.target, level, internalFormat, width, height, border, srcFormat, srcType, data);
 			}
-			else if(texture instanceof THREE.CanvasTexture)
+			else if(texture instanceof CanvasTexture)
 			{
 				data = texture.image;
 
