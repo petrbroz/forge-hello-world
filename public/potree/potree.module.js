@@ -304,10 +304,10 @@ function getBasePath()
 }
 
 // Three.js r71 doesn't support normalized buffer attributes, so we turn the uint8s into floats manually
-function denormalizeUint8Array(uints) {
-	const floats = new Float32Array(uints.length);
+function denormalizeUint8Array(ubytes) {
+	const floats = new Float32Array(ubytes.length);
 	for (let i = 0; i < floats.length; i++) {
-		floats[i] = uints[i] / 255.0;
+		floats[i] = ubytes[i] / 255.0;
 	}
 	return floats;
 }
@@ -1420,6 +1420,7 @@ class GreyhoundBinaryLoader
 			);
 
 			var geometry = new THREE.BufferGeometry();
+			geometry.isPoints = true;
 
 			for(var property in buffers)
 			{
@@ -2039,6 +2040,7 @@ class BinaryLoader
 			var buffers = data.attributeBuffers;
 			var tightBoundingBox = new THREE.Box3(new THREE.Vector3().fromArray(data.tightBoundingBox.min), new THREE.Vector3().fromArray(data.tightBoundingBox.max));
 			var geometry = new THREE.BufferGeometry();
+			geometry.isPoints = true;
 
 			for(var property in buffers)
 			{
@@ -2642,6 +2644,7 @@ class LASLAZBatcher
 		worker.onmessage = function(e)
 		{
 			var geometry = new THREE.BufferGeometry();
+			geometry.isPoints = true;
 			var numPoints = data.pointsCount;
 
 			var positions = new Float32Array(e.data.position);
@@ -3202,6 +3205,7 @@ class EptBinaryLoader
 		worker.onmessage = function(e)
 		{
 			var g = new THREE.BufferGeometry();
+			g.isPoints = true;
 			var numPoints = e.data.numPoints;
 
 			var position = new Float32Array(e.data.position);
@@ -3396,6 +3400,7 @@ class EptLazBatcher
 		worker.onmessage = (e) =>
 		{
 			var g = new THREE.BufferGeometry();
+			g.isPoints = true;
 			var numPoints = las.pointsCount;
 
 			var positions = new Float32Array(e.data.position);
@@ -7903,6 +7908,7 @@ class PointCloudArena4DGeometryNode
 				}
 
 				var geometry = new THREE.BufferGeometry();
+				geometry.isPoints = true;
 				geometry.addAttribute("position", new THREE.BufferAttribute(position, 3));
 				//geometry.addAttribute("color", new THREE.BufferAttribute(color, 4, true));
 				geometry.addAttribute("color", new THREE.BufferAttribute(Global.denormalizeUint8Array(color), 4));

@@ -3,7 +3,7 @@ class PotreeExtension extends Autodesk.Viewing.Extension {
         super(viewer, options);
         this._button = null;
         this._toolbar = null;
-        this._points = null;
+        this._group = null;
         this._pointcloud = null;
     }
 
@@ -20,7 +20,7 @@ class PotreeExtension extends Autodesk.Viewing.Extension {
     onToolbarCreated() {
         this._button = new Autodesk.Viewing.UI.Button('potree-button');
         this._button.onClick = () => {
-            if (!this._points) {
+            if (!this._group) {
                 this.loadPointCloud('/potree/data/lion_takanawa/cloud.js');
             }
         };
@@ -32,14 +32,13 @@ class PotreeExtension extends Autodesk.Viewing.Extension {
 
     loadPointCloud(url, position) {
         Potree.loadPointCloud(url, 'pointcloud', (e) => {
-            this._points = new Potree.Group();
-            this._points.isPotreeGroup = true; // for debugging
-            this._points.material.opacity = 1.0;
-            this._points.material.wireframe = true;
-            this._points.scale.x = this._points.scale.y = this._points.scale.z = 2.5;
+            this._group = new THREE.Group();
+            this._group.isPotreeGroup = true; // for debugging
+            this._group.scale.x = this._group.scale.y = this._group.scale.z = 5.0;
+            this._group.position.z = -35.0;
 
             this._pointcloud = e.pointcloud;
-            this._pointcloud.isPotreePointcloud = true; // for debugging
+            this._pointcloud.isPotree = true; // for debugging
             if (position !== undefined) {
                 this._pointcloud.position.copy(position);
             }
@@ -49,12 +48,13 @@ class PotreeExtension extends Autodesk.Viewing.Extension {
             material.pointSizeType = Potree.PointSizeType.ADAPTIVE; //ADAPTIVE | FIXED
             material.shape = Potree.PointShape.CIRCLE; //CIRCLE | SQUARE
 
-            this._points.add(this._pointcloud);
+            this._group.add(this._pointcloud);
             if (!this.viewer.overlays.hasScene('potree-scene')) {
                 this.viewer.overlays.addScene('potree-scene');
             }
-            this.viewer.overlays.addMesh(this._points, 'potree-scene');
+            this.viewer.overlays.addMesh(this._group, 'potree-scene');
             this.viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, this.updatePointCloud.bind(this));
+            this.updatePointCloud();
         });
     }
 
