@@ -45,11 +45,8 @@ class DrawTool extends Autodesk.Viewing.ToolInterface {
     }
 
     getPriority() {
-        return 5;
+        return 1; // Use any number higher than 0 (the priority of all default tools)
     }
-
-    // update(highResTimestamp) {
-    // }
 
     handleButtonDown(event, button) {
         // If left button is pressed and we're not drawing already
