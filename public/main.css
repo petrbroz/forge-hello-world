@@ -15,3 +15,26 @@ body, html {
     top: 1em;
     z-index: 1;
 }
+
+#box-draw-tool-button,
+#sphere-draw-tool-button {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 28px;
+    height: 28px;
+}
+
+#box-draw-tool-button.active,
+#sphere-draw-tool-button.active {
+    border: 1px solid lightblue;
+}
+
+#box-draw-tool-button {
+    background-image: url(/box.png); /* Icons made by <a href="https://www.flaticon.com/authors/darius-dan" title="Darius Dan">Darius Dan</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> */
+
+}
+
+#sphere-draw-tool-button {
+    background-image: url(/sphere.png); /* Icons made by <a href="https://www.flaticon.com/authors/darius-dan" title="Darius Dan">Darius Dan</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> */
+}
