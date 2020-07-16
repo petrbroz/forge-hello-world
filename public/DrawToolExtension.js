@@ -64,7 +64,7 @@ class DrawTool extends Autodesk.Viewing.ToolInterface {
             this.viewer.impl.addOverlay(DrawToolOverlay, this.mesh);
 
             // Initialize the 3 values that will control the geometry's size (1st corner in the XY plane, 2nd corner in the XY plane, and height)
-            this.corner1 = this.corner2 = this.viewer.impl.intersectGround(event.clientX, event.clientY);
+            this.corner1 = this.corner2 = this._intersect(event.clientX, event.clientY);
             this.height = 0.1;
             this._update();
             this.state = 'xy'; // Now we're drawing in the XY plane
@@ -79,7 +79,7 @@ class DrawTool extends Autodesk.Viewing.ToolInterface {
         // If left button is released and we're drawing in the XY plane
         if (button === 0 && this.state === 'xy') {
             // Update the 2nd corner in the XY plane and switch to the 'z' state
-            this.corner2 = this.viewer.impl.intersectGround(event.clientX, event.clientY);
+            this.corner2 = this._intersect(event.clientX, event.clientY);
             this._update();
             this.state = 'z';
             this.lastClientY = event.clientY; // Store the current mouse Y coordinate to compute height later on
@@ -93,7 +93,7 @@ class DrawTool extends Autodesk.Viewing.ToolInterface {
     handleMouseMove(event) {
         if (!this.bypassed && this.state === 'xy') {
             // If we're in the "XY plane drawing" state, and not bypassed by another tool
-            this.corner2 = this.viewer.impl.intersectGround(event.clientX, event.clientY);
+            this.corner2 = this._intersect(event.clientX, event.clientY);
             this._update();
             return true;
         } else if (!this.bypassed && this.state === 'z') {
@@ -116,13 +116,17 @@ class DrawTool extends Autodesk.Viewing.ToolInterface {
         return false;
     }
 
+    _intersect(clientX, clientY) {
+        return this.viewer.impl.intersectGround(clientX, clientY);
+    }
+
     _update() {
         const { corner1, corner2, height, mesh } = this;
         const minX = Math.min(corner1.x, corner2.x), maxX = Math.max(corner1.x, corner2.x);
         const minY = Math.min(corner1.y, corner2.y), maxY = Math.max(corner1.y, corner2.y);
         mesh.position.x = minX + 0.5 * (maxX - minX);
         mesh.position.y = minY + 0.5 * (maxY - minY);
-        mesh.position.z = 0.5 * height;
+        mesh.position.z = corner1.z + 0.5 * height;
         mesh.scale.x = maxX - minX;
         mesh.scale.y = maxY - minY;
         mesh.scale.z = height;
